@@ -1,17 +1,36 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+   <section @click="move" >
+    <img id="nick" src="./assets/nick.png" alt="Nick">
+
+   </section>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+// import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    
+  },
+  data() {
+    return {
+      x: "",
+      y: ""
+    }
+  },
+  methods: {
+    move: function(event) {
+      this.x = event.clientX;
+      this.y = event.clientY;
+      console.log(this.x , this.y);
+      var img = document.getElementById("nick");
+      img.style.left = this.x;
+      img.style.top = this.y;
+
+    }
   }
 }
 </script>
@@ -21,8 +40,18 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
+section {
+  height: 100vh;
+}
+ img {
+   height: 350px;
+   width: auto;
+   position: absolute;
+ }
+  img:hover {
+    rotate: 45deg;
+  }
+
 </style>
