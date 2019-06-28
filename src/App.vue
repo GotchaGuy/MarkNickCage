@@ -18,17 +18,39 @@ export default {
   data() {
     return {
       x: "",
-      y: ""
+      y: "",
+      socket: new WebSocket("ws://localhost:3000"),
+      Obj: {}
     }
+  },
+  mounted() {
+    this.socket.addEventListener("open", () => {
+      console.log("Connected to WebSocket");
+    })
+    this.socket.addEventListener("close", () => {
+      console.log("Disconnected from WebSocket");
+    })
+    this.socket.addEventListener("message", (info) => {
+        console.log('Message from the server: ', info);
+       var img = document.getElementById("nick");
+      img.style.left = info.data - 120 + "px";
+      // img.style.top = info.y.data - 175 + "px";
+
+    })
+    this.socket.addEventListener("error", function(error) {
+      console.log(error);
+    })
   },
   methods: {
     move: function(event) {
       this.x = event.clientX;
       this.y = event.clientY;
-      console.log(this.x , this.y);
-      var img = document.getElementById("nick");
-      img.style.left = this.x;
-      img.style.top = this.y;
+      this.Obj = {
+        x: this.x,
+        y: this.y
+      }
+      this.socket.send(this.x);
+     
 
     }
   }
@@ -50,8 +72,18 @@ section {
    width: auto;
    position: absolute;
  }
-  img:hover {
-    rotate: 45deg;
+
+  @keyframes change {
+    0% {transform: rotate(0deg) translate()}
+    25% {transform: rotate(45deg) translate()}
+    75% {transform: rotate(-45deg) translate()}
+    100% {transform: rotate(0deg) translate()}
   }
+
+  img:hover {
+    animation: change 2s 1;
+  }
+
+  
 
 </style>
