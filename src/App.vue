@@ -20,7 +20,10 @@ export default {
       x: "",
       y: "",
       socket: new WebSocket("ws://localhost:3000"),
-      Arr: []
+      Obj: {
+        x: this.x,
+        y: this.y
+      }
     }
   },
   mounted() {
@@ -31,11 +34,13 @@ export default {
       console.log("Disconnected from WebSocket");
     })
     this.socket.addEventListener("message", (info) => {
-      var unzip = JSON.parse(info);
-        console.log('Message from the server: ', unzip);
+  
+      var unzip = JSON.parse(info.data);
+     
+        console.log('Message from the server: ', info);
        var img = document.getElementById("nick");
-      img.style.left = unzip.x.data - 120 + "px";
-      img.style.top = unzip.y.data - 175 + "px";
+      img.style.left = unzip.x - 120 + "px";
+      img.style.top = unzip.y - 175 + "px";
 
     })
     this.socket.addEventListener("error", function(error) {
@@ -46,8 +51,11 @@ export default {
     move: function(event) {
       this.x = event.clientX;
       this.y = event.clientY;
-      this.Arr = [this.x, this.y];
-      var zip = JSON.stringify(this.Arr);
+      this.Obj = {
+        x: this.x,
+        y: this.y
+      }
+      var zip = JSON.stringify(this.Obj);
       this.socket.send(zip);
      
 
